@@ -1,6 +1,9 @@
 # OpenCode Forge
 
-One-command installer for a complete local OpenCode environment.
+> 🌍 Language / Langue : **English** (current) · **[Français](README.fr.md)**
+>
+> One-command installer for a complete local OpenCode environment.
+> Installateur en une commande pour un environnement OpenCode local complet.
 
 ## What it installs
 
