@@ -20,3 +20,5 @@ tmp/
 service.json
 opencode.jsonc.bak*
 *_backup/
+# PowerShell module analysis cache (regenerable, never commit)
+ModuleAnalysisCache
