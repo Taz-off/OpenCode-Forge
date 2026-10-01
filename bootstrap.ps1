@@ -1,7 +1,7 @@
 # bootstrap.ps1 — single-command entry point (run from GitHub release).
 # Usage (after the 0.1.0 release exists):
-#   irm https://github.com/<OWNER>/OpenCode-Forge/releases/latest/download/bootstrap.ps1 | iex
-param([string]$Owner = '<OWNER>', [string]$Repo = 'OpenCode-Forge')
+#   irm https://github.com/Taz-off/OpenCode-Forge/releases/latest/download/bootstrap.ps1 | iex
+param([string]$Owner = 'Taz-off', [string]$Repo = 'OpenCode-Forge')
 $ErrorActionPreference = 'Stop'
 $api = "https://api.github.com/repos/$Owner/$Repo/releases/latest"
 try {

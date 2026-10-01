@@ -21,11 +21,8 @@ One-command installer for a complete local OpenCode environment.
 
 ## Install (one command)
 
-> The URL below becomes real after the `0.1.0` release is published.
-> Do not guess it: check the GitHub releases page first.
-
 ```powershell
-irm https://github.com/<OWNER>/OpenCode-Forge/releases/latest/download/bootstrap.ps1 | iex
+irm https://github.com/Taz-off/OpenCode-Forge/releases/latest/download/bootstrap.ps1 | iex
 ```
 
 Local install instead:

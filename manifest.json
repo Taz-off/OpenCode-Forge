@@ -8,9 +8,9 @@
   "channels": ["stable", "beta", "dev"],
   "minimumInstallerVersion": "0.1.0",
   "commandName": "opencode-forge",
-  "repo": "https://github.com/<OWNER>/OpenCode-Forge",
-  "releaseUrl": "https://github.com/<OWNER>/OpenCode-Forge/releases/latest",
-  "manifestUrl": "https://github.com/<OWNER>/OpenCode-Forge/releases/latest/download/manifest.json",
+  "repo": "https://github.com/Taz-off/OpenCode-Forge",
+  "releaseUrl": "https://github.com/Taz-off/OpenCode-Forge/releases/latest",
+  "manifestUrl": "https://github.com/Taz-off/OpenCode-Forge/releases/latest/download/manifest.json",
   "configSchema": 1,
   "singleConfigSource": "opencode.jsonc",
   "components": {
