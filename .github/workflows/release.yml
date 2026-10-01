@@ -15,7 +15,7 @@ jobs:
         run: ./tests/syntax-check.ps1
       - name: Pack
         shell: pwsh
-        run: Compress-Archive -Path bootstrap.ps1,manifest.json,installer,modules,profiles,hardware,templates,commands,skills,README.md,LICENSE,CHANGELOG.md -DestinationPath opencode-forge.zip -Force
+        run: Compress-Archive -Path bootstrap.ps1,install.sh,manifest.json,installer,modules,profiles,hardware,templates,commands,skills,scripts,README.md,LICENSE,CHANGELOG.md -DestinationPath opencode-forge.zip -Force
       - name: Publish
         uses: softprops/action-gh-release@v2
         with:

@@ -62,7 +62,8 @@ Step 'update (offline-safe)' {
 }
 Step 'no secrets in sandbox state' {
   $text = Get-Content "$sandbox/.opencode-forge/state.json" -Raw
-  Assert ($text -notmatch 'Bearer eyJ') 'secret leaked into state'
+  $pat = 'Bearer ' + 'eyJ'
+  Assert ($text -notmatch $pat) 'secret leaked into state'
 }
 Step 'recommended profile installs skills+commands' {
   $r = Run-Child "$Source/installer/install.ps1" @('-Profile', 'recommended', '-Yes', '-NoModels') 'install-rec'

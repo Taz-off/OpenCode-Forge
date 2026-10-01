@@ -1,0 +1,2 @@
+# Keep Unix shell scripts LF everywhere (Windows checkout must not add CRLF).
+*.sh text eol=lf

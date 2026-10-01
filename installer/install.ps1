@@ -1,6 +1,12 @@
 # install.ps1 — interactive installer. Idempotent. No big download without confirmation.
-param([string]$Profile = '', [switch]$Yes, [switch]$NoModels)
+param([string]$Profile = '', [switch]$Yes, [switch]$NoModels, [switch]$Check, [switch]$Help)
 $Root = Split-Path $PSScriptRoot
+if ($Help) {
+  Write-Host 'Usage: .\install.ps1 [-Profile NAME] [-Yes] [-NoModels] [-Check] [-Help]'
+  Write-Host '  NAME = minimal|recommended|minecraft|gamedev|complete|custom'
+  Write-Host '  -Check verifies only and changes nothing (same as doctor.ps1).'
+  exit 0
+}
 Import-Module "$Root/modules/Hardware.psm1" -Force
 Import-Module "$Root/modules/Software.psm1" -Force
 Import-Module "$Root/modules/Models.psm1" -Force
@@ -10,6 +16,8 @@ Import-Module "$Root/modules/OpenCode.psm1" -Force
 Import-Module "$Root/modules/Skills.psm1" -Force
 Import-Module "$Root/modules/Ollama.psm1" -Force
 Import-Module "$Root/modules/OpenViking.psm1" -Force
+
+if ($Check) { & (Join-Path $PSScriptRoot 'doctor.ps1'); exit $LASTEXITCODE }
 
 $hw = Get-ForgeHardware
 $sw = Get-ForgeSoftware

@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 Format: Keep a Changelog. Versioning: SemVer (`0.1.0` first).
 
+## [0.2.0] - 2026-10-01
+
+### Added
+
+- `install.sh`: Linux + macOS installer (Intel + Apple Silicon). OS/arch
+  detection, apt/dnf/pacman + Homebrew (both prefixes), official installs
+  only when missing, sudo only for package commands, `--check`/`--help`/`--dry-run`.
+- `scripts/openviking-run.sh`: start memory server, wait `/health`, run OpenCode.
+  No permanent system service on any OS.
+- `install.ps1`: `-Check` (doctor) and `-Help` flags.
+
+### Changed
+
+- `OpenCode.psm1`: `uvx`/`tsx` command names adapt to the OS (no `.exe`/`.cmd` on Unix).
+
 ## [0.1.0] - 2026-10-01
 
 ### Added

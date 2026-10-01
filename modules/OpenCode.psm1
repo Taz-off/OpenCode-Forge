@@ -16,17 +16,21 @@ function Install-ForgeOpenCodeConfig($TemplatePath, $MemoryModel) {
     Write-Host "Legacy opencode.json moved to: $disabled (single source: opencode.jsonc)"
   }
   $text = Get-Content $TemplatePath -Raw
-  $uvx = 'uvx'
+  $isWin = $true
+  try { if ((Get-Variable IsWindows -ErrorAction Stop) -and (-not $IsWindows)) { $isWin = $false } } catch { $isWin = $true }
+  $uvxExe = 'uvx'; $tsxCmd = 'tsx'
+  if ($isWin) { $uvxExe = 'uvx.exe'; $tsxCmd = 'tsx.cmd' }
+  $uvx = $uvxExe
   try {
-    $u = Get-Command 'uvx' -ErrorAction SilentlyContinue
+    $u = Get-Command $uvxExe -ErrorAction SilentlyContinue
     if ($u) { $uvx = $u.Source }
-    else {
+    elseif ($isWin) {
       $local = Join-Path (Get-ForgeHome) '.local/bin/uvx.exe'
       if (Test-Path $local) { $uvx = $local }
     }
   } catch { }
-  $tsx = 'tsx.cmd'
-  try { $t = Get-Command 'tsx.cmd' -ErrorAction SilentlyContinue; if ($t) { $tsx = $t.Source } } catch { }
+  $tsx = $tsxCmd
+  try { $t = Get-Command $tsxCmd -ErrorAction SilentlyContinue; if ($t) { $tsx = $t.Source } } catch { }
   $text = $text.Replace('__UVX__', ($uvx -replace '\\', '\\')).Replace('__TSX__', ($tsx -replace '\\', '\\'))
   $text | Set-Content $dest -Encoding UTF8
   # dcp.jsonc

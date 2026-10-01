@@ -14,26 +14,118 @@ One-command installer for a complete local OpenCode environment.
 
 ## Requirements
 
-- Windows 10/11 (build 19041+)
-- PowerShell 5.1 or 7.x
-- Node.js 20+ (for OpenCode)
+- Windows 11, Linux (apt/dnf/pacman), or macOS Intel / Apple Silicon
+- Windows: PowerShell 5.1 or 7.x. Linux/macOS: bash + python3 (for model rules)
+- Node.js 20+ (installed automatically if missing and a package manager exists)
 - Internet for the first install
 
-## Install (one command)
+## Installation
+
+Clone, then run ONE command for your OS.
+
+Windows PowerShell:
+
+```powershell
+git clone https://github.com/Taz-off/OpenCode-Forge.git
+cd OpenCode-Forge
+powershell -ExecutionPolicy Bypass -File .\installer\install.ps1
+```
+
+Linux:
+
+```bash
+git clone https://github.com/Taz-off/OpenCode-Forge.git
+cd OpenCode-Forge
+chmod +x install.sh
+./install.sh
+```
+
+macOS (Intel or Apple Silicon, same command):
+
+```bash
+git clone https://github.com/Taz-off/OpenCode-Forge.git
+cd OpenCode-Forge
+chmod +x install.sh
+./install.sh
+```
+
+One-command remote install (stable release):
 
 ```powershell
 irm https://github.com/Taz-off/OpenCode-Forge/releases/latest/download/bootstrap.ps1 | iex
 ```
 
-Local install instead:
+The installer detects your machine (OS, CPU arch, RAM, GPU when visible,
+installed tools), proposes a profile, shows the full plan and asks for
+confirmation. No big download happens without your `yes`.
+
+### Supported systems
+
+| OS | Installer | Arch | Package managers |
+|---|---|---|---|
+| Windows 11 | `installer/install.ps1` | x86_64 | winget/manual (existing tools reused) |
+| Linux | `install.sh` | x86_64, arm64 | apt, dnf, pacman |
+| macOS | `install.sh` | Intel, Apple Silicon | Homebrew (`/opt/homebrew` + `/usr/local`) |
+
+### What is installed / configured
+
+- OpenCode (via npm, only if missing) + config `opencode.jsonc` (single source)
+- OpenViking memory server config (`~/.openviking/ov.conf`), server on `127.0.0.1:1933`
+- Ollama (official installer, only if missing) + embedding model + memory model for your tier
+- Plugins: DCP, Plannotator, Superpowers (+ OpenViking)
+- Commands `/discuss` `/plan` `/build` `/explore`, `project-thinking` skill (+ per profile)
+- Optional MCPs: Context7, Blender, Unity, Minecraft Paper/Fabric
+
+### If tools already exist
+
+Existing tools are reused, never reinstalled. An existing `opencode.jsonc`
+is backed up to `~/.opencode-forge/backups/` before any change; a stray
+`opencode.json` is moved aside (single source rule). Re-running the installer
+is safe (idempotent).
+
+### Config location
+
+- Windows: `%USERPROFILE%\.config\opencode` · Linux/macOS: `$HOME/.config/opencode`
+- State: `~/.opencode-forge/` (`state.json`, logs, backups)
+
+### Memory (OpenViking)
+
+No permanent system service. Start memory with OpenCode:
+
+- Windows: module `Start-ForgeOpenViking` (single instance via port check)
+- Linux/macOS: `./scripts/openviking-run.sh` (starts server, waits `/health`, runs `opencode`)
+
+If the server is down, OpenCode still starts with a warning.
+
+### Update / uninstall
+
+- Update: `installer/update.ps1` (Windows) compares the remote manifest and
+  applies only what changed. On Linux/macOS: `git pull` then re-run `./install.sh`.
+- Uninstall: delete `~/.config/opencode/opencode.jsonc` (backup kept in
+  `~/.opencode-forge/backups/`), delete `~/.opencode-forge/`,
+  optionally `ollama rm <model>`.
+
+### Check without changing anything
 
 ```powershell
-.\installer\install.ps1
+.\installer\install.ps1 -Check   # Windows (also: .\installer\doctor.ps1)
 ```
 
-The installer detects your PC, shows CPU / RAM / GPU / VRAM / disk /
-available tools, proposes a profile, shows the full plan and asks for
-confirmation. No big download happens without your `yes`.
+```bash
+./install.sh --check             # Linux/macOS (also: --help, --dry-run)
+```
+
+This verifies OS, architecture, dependencies, OpenCode, Ollama, config,
+memory server and models — and changes nothing.
+
+### Troubleshooting
+
+- `doctor` / `--check` first, it tells you what to do.
+- `curl: command not found` (minimal Linux): `sudo apt install curl` (or dnf/pacman equivalent).
+- Homebrew missing (macOS): install from https://brew.sh, or install Node/Ollama manually and re-run.
+- No package manager found (Linux): install Node 20+, Ollama and uv manually, then re-run (config-only mode still works).
+- OpenViking down? `openviking-server --config ~/.openviking/ov.conf`.
+- `secret-scan.ps1` fails? Stop, fix, never push.
 
 ## Profiles
 
@@ -50,6 +142,8 @@ confirmation. No big download happens without your `yes`.
 
 After install, from the project folder:
 
+Windows:
+
 ```powershell
 .\installer\install.ps1    # (re-)install, idempotent
 .\installer\update.ps1     # update from remote manifest
@@ -59,26 +153,28 @@ After install, from the project folder:
 .\installer\rollback.ps1   # restore newest backup
 ```
 
+Linux/macOS:
+
+```bash
+./install.sh               # (re-)install, idempotent
+./install.sh --check       # verify, change nothing
+./scripts/openviking-run.sh  # memory server + OpenCode
+```
+
 Planned command name (rename-friendly, see `manifest.json` → `commandName`):
 `opencode-forge install | update | configure | status | doctor | repair | rollback`.
 
 ## Update
 
-`update.ps1` fetches the remote manifest, compares versions, backs up your
-config, applies only what changed, then updates `~/.opencode-forge/state.json`.
-It never reinstalls everything.
+Windows `update.ps1` fetches the remote manifest, compares versions, backs up
+your config, applies only what changed, then updates `~/.opencode-forge/state.json`.
+On Linux/macOS: `git pull` + re-run `./install.sh` (idempotent, same result).
 
 ## Doctor
 
-Checks OpenCode, Git, GitHub CLI, Ollama, OpenViking, port 1933, config file,
+Windows `doctor.ps1` (or `install.ps1 -Check`), Unix `./install.sh --check`:
+checks OS/arch, Git, Node, OpenCode, Ollama, OpenViking, port 1933, config file,
 DCP and Context7 — with one short hint per failure.
-
-## Uninstall
-
-1. Delete the config: `$env:USERPROFILE\.config\opencode\opencode.jsonc`
-   (a timestamped backup is already in `~/.opencode-forge/backups/`).
-2. Delete state: `$env:USERPROFILE\.opencode-forge\`.
-3. Optionally `ollama rm <model>` for downloaded models.
 
 ## Security
 
@@ -99,7 +195,8 @@ tests with every change, French or English short messages.
 
 ## Troubleshooting
 
-- `doctor.ps1` first, it tells you what to do.
-- OpenViking down? `openviking-server --config $env:USERPROFILE/.openviking/ov.conf`,
+- `doctor.ps1` / `./install.sh --check` first, it tells you what to do.
+- OpenViking down? `openviking-server --config ~/.openviking/ov.conf`
+  (Windows: `$env:USERPROFILE/.openviking/ov.conf`),
   OpenCode still starts with a warning.
 - `secret-scan.ps1` fails? Stop, fix, never push.
