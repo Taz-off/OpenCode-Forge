@@ -1,0 +1,46 @@
+{
+  "$schema": "https://opencode-forge.local/schemas/manifest.json",
+  "name": "opencode-forge",
+  "displayName": "OpenCode Forge",
+  "description": "One-command installer for a complete local OpenCode environment (OpenViking memory, Ollama models, plugins, commands, skills, optional MCP).",
+  "version": "0.1.0",
+  "channel": "stable",
+  "channels": ["stable", "beta", "dev"],
+  "minimumInstallerVersion": "0.1.0",
+  "commandName": "opencode-forge",
+  "repo": "https://github.com/<OWNER>/OpenCode-Forge",
+  "releaseUrl": "https://github.com/<OWNER>/OpenCode-Forge/releases/latest",
+  "manifestUrl": "https://github.com/<OWNER>/OpenCode-Forge/releases/latest/download/manifest.json",
+  "configSchema": 1,
+  "singleConfigSource": "opencode.jsonc",
+  "components": {
+    "opencode": { "required": true, "profiles": ["minimal", "recommended", "minecraft", "gamedev", "complete"] },
+    "openviking": { "required": true, "profiles": ["minimal", "recommended", "minecraft", "gamedev", "complete"], "server": "127.0.0.1:1933" },
+    "ollama": { "required": true, "profiles": ["minimal", "recommended", "minecraft", "gamedev", "complete"] },
+    "embeddingModel": { "required": true, "default": "nomic-embed-text", "profiles": ["minimal", "recommended", "minecraft", "gamedev", "complete"] },
+    "memoryModel": { "required": true, "profiles": ["minimal", "recommended", "minecraft", "gamedev", "complete"], "ruleFile": "hardware/model-rules.json" },
+    "dcp": { "plugin": "@tarquinen/opencode-dcp@latest", "profiles": ["recommended", "minecraft", "gamedev", "complete"] },
+    "plannotator": { "plugin": "@plannotator/opencode@latest", "profiles": ["recommended", "minecraft", "gamedev", "complete"] },
+    "superpowers": { "plugin": "superpowers@git+https://github.com/obra/superpowers.git", "profiles": ["recommended", "minecraft", "gamedev", "complete"] },
+    "projectThinking": { "skill": "project-thinking", "profiles": ["recommended", "minecraft", "gamedev", "complete"] },
+    "context7": { "mcp": "context7", "url": "https://mcp.context7.com/mcp", "profiles": ["recommended", "minecraft", "gamedev", "complete"] },
+    "commands": { "files": ["discuss.md", "plan.md", "build.md", "explore.md"], "profiles": ["recommended", "minecraft", "gamedev", "complete"] },
+    "minecraftSkills": { "skills": ["minecraft-paper-dev", "minecraft-fabric-dev", "minecraft-neoforge-dev", "minecraft-resourcepack-datapack-dev", "minecraft-server-debug"], "profiles": ["minecraft", "complete"] },
+    "minecraftMcp": { "servers": ["minecraft-paper", "minecraft-fabric"], "optional": true, "profiles": ["minecraft", "complete"] },
+    "blender": { "skill": "blender-game-assets", "mcp": "blender", "optional": true, "profiles": ["gamedev", "complete"] },
+    "unity": { "skill": "unity-development", "mcp": "kitwright-unity", "optional": true, "profiles": ["gamedev", "complete"] },
+    "unreal": { "skill": "unreal-development", "optional": true, "profiles": ["gamedev", "complete"] }
+  },
+  "dependencies": {
+    "windows": { "minBuild": 19041 },
+    "powershell": ["5.1", "7.x"],
+    "node": { "min": "20.0.0", "note": "needed for OpenCode + tsx-based MCP servers" },
+    "ollama": { "note": "installed on demand, confirmation required before download" }
+  },
+  "compatibility": {
+    "opencode": { "min": "2.0.0", "configFormat": "V2 (plugins key)" },
+    "openviking": { "server": "127.0.0.1:1933", "note": "local only, never 0.0.0.0" }
+  },
+  "stateDir": "~/.opencode-forge",
+  "stateFiles": ["state.json", "settings.json", "logs/", "backups/"]
+}

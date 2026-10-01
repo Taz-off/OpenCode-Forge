@@ -1,0 +1,7 @@
+{
+  "name": "gamedev",
+  "extends": "recommended",
+  "description": "Recommended + Blender/Unity/Unreal skills, MCPs only when the host tool is relevant.",
+  "components": ["opencode", "openviking", "ollama", "embeddingModel", "memoryModel", "dcp", "plannotator", "superpowers", "projectThinking", "context7", "commands", "blender", "unity", "unreal"],
+  "optional": ["blender", "unity", "unreal"]
+}

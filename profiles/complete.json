@@ -1,0 +1,7 @@
+{
+  "name": "complete",
+  "extends": "recommended",
+  "description": "Everything: recommended + minecraft + gamedev. Optional MCPs still ask before install.",
+  "components": ["opencode", "openviking", "ollama", "embeddingModel", "memoryModel", "dcp", "plannotator", "superpowers", "projectThinking", "context7", "commands", "minecraftSkills", "minecraftMcp", "blender", "unity", "unreal"],
+  "optional": ["minecraftMcp", "blender", "unity", "unreal"]
+}

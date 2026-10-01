@@ -1,0 +1,5 @@
+{
+  "name": "minimal",
+  "description": "OpenCode + OpenViking + Ollama + embedding + memory model adapted to the PC.",
+  "components": ["opencode", "openviking", "ollama", "embeddingModel", "memoryModel"]
+}

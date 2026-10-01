@@ -1,0 +1,7 @@
+{
+  "name": "minecraft",
+  "extends": "recommended",
+  "description": "Recommended + Paper/Fabric/NeoForge/resourcepack skills + server-debug + optional Paper/Fabric MCP.",
+  "components": ["opencode", "openviking", "ollama", "embeddingModel", "memoryModel", "dcp", "plannotator", "superpowers", "projectThinking", "context7", "commands", "minecraftSkills", "minecraftMcp"],
+  "optional": ["minecraftMcp"]
+}

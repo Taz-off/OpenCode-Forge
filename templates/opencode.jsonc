@@ -1,0 +1,50 @@
+// OpenCode Forge — single config source (opencode.jsonc).
+// Installed to: %USERPROFILE%\.config\opencode\opencode.jsonc
+// Do NOT create a second opencode.json next to it. One source only.
+// Tokens __HOME__ and __APPDATA__ are replaced by the installer.
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugins": [
+    "@tarquinen/opencode-dcp@latest",
+    "@plannotator/opencode@latest",
+    "@openviking/opencode-plugin",
+    "superpowers@git+https://github.com/obra/superpowers.git"
+  ],
+  "mcp": {
+    "servers": {
+      "context7": {
+        "type": "remote",
+        "url": "https://mcp.context7.com/mcp"
+      }
+      // Optional servers are added by the installer per profile.
+      // Home Assistant (disabled by default, needs env token):
+      // "homeassistant": {
+      //   "type": "remote",
+      //   "url": "http://127.0.0.1:8123/api/mcp",
+      //   "oauth": false,
+      //   "headers": { "Authorization": "Bearer {env:HOMEASSISTANT_TOKEN}" }
+      // },
+      // Blender (local, only when Blender is used):
+      // "blender": {
+      //   "type": "local",
+      //   "command": ["__UVX__", "mcp-for-blender"],
+      //   "environment": { "BLENDER_HOST": "localhost", "BLENDER_PORT": "9876", "DISABLE_TELEMETRY": "true" }
+      // },
+      // Unity via KitWright (only when Unity runs):
+      // "kitwright-unity": { "type": "remote", "url": "http://127.0.0.1:8765/", "oauth": false },
+      // Minecraft Paper (optional, needs a Paper server + workspace path):
+      // "minecraft-paper": {
+      //   "type": "local",
+      //   "command": ["__TSX__", "__MINECRAFT_MCP__/packages/mcp-server-paper/src/index.ts"],
+      //   "environment": { "PAPER_WS_URL": "ws://localhost:25575" }
+      // },
+      // Minecraft Fabric (optional):
+      // "minecraft-fabric": {
+      //   "type": "local",
+      //   "command": ["__TSX__", "__MINECRAFT_MCP__/packages/mcp-server-fabric/src/index.ts"],
+      //   "environment": { "FABRIC_WS_URL": "ws://localhost:25576" }
+      // }
+    }
+  },
+  "permissions": []
+}

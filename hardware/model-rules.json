@@ -1,0 +1,39 @@
+{
+  "$schema": "https://opencode-forge.local/schemas/model-rules.json",
+  "version": 1,
+  "note": "Data-driven model selection. Installer reads this file, never hardcodes model choice in scripts.",
+  "embeddingModel": "nomic-embed-text",
+  "tiers": [
+    {
+      "tier": "low",
+      "when": { "ramGbMax": 8, "vramGbMax": 4 },
+      "memoryModel": "gemma3:4b",
+      "codeModel": null,
+      "note": "Small iGPU / 8 GB RAM. Memory model ~3 GB, no local code model by default."
+    },
+    {
+      "tier": "medium",
+      "when": { "ramGbMax": 16, "vramGbMax": 8 },
+      "memoryModel": "qwen3:8b",
+      "codeModel": "qwen3-coder:30b",
+      "codeModelOptional": true,
+      "note": "Typical laptop (ex: 15 GB RAM, AMD iGPU). Memory model ~5 GB. Code model only on explicit confirmation (18 GB)."
+    },
+    {
+      "tier": "high",
+      "when": { "ramGbMax": 32, "vramGbMax": 14 },
+      "memoryModel": "qwen3.5:9b",
+      "codeModel": "qwen3-coder:30b",
+      "codeModelOptional": true,
+      "note": "Ex: RTX 4070 12 GB. Reference setup from design machine."
+    },
+    {
+      "tier": "very-high",
+      "when": { "ramGbMax": 999, "vramGbMax": 999 },
+      "memoryModel": "qwen3.5:9b",
+      "codeModel": "qwen3-coder:30b",
+      "codeModelOptional": true,
+      "note": "32 GB+ RAM / 16 GB+ VRAM. Same defaults as high, user can upsize manually."
+    }
+  ]
+}

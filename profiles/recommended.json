@@ -1,0 +1,6 @@
+{
+  "name": "recommended",
+  "extends": "minimal",
+  "description": "Minimal + DCP + Plannotator + Superpowers + project-thinking + Context7 + /discuss /plan /build /explore.",
+  "components": ["opencode", "openviking", "ollama", "embeddingModel", "memoryModel", "dcp", "plannotator", "superpowers", "projectThinking", "context7", "commands"]
+}
