@@ -1,4 +1,3 @@
-# repair.ps1 — re-apply templates + skills, verify with doctor.
+# repair.ps1 — real repair: verify, fix only broken components, retest.
 $Root = Split-Path $PSScriptRoot
-& (Join-Path $PSScriptRoot 'configure.ps1')
-& (Join-Path $PSScriptRoot 'doctor.ps1')
+& (Join-Path $PSScriptRoot 'install.ps1') -Repair

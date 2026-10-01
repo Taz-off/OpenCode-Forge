@@ -1,0 +1,36 @@
+name: ci
+on:
+  push:
+  pull_request:
+jobs:
+  unix:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: bash syntax
+        run: bash -n install.sh
+      - name: mock unit tests (no downloads, no sudo)
+        run: bash tests/test-install-sh.sh
+      - name: dry-run (changes nothing)
+        run: ./install.sh --dry-run --yes --no-models
+      - name: check mode (changes nothing)
+        run: ./install.sh --check || true
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Secret scan
+        shell: pwsh
+        run: ./tests/secret-scan.ps1
+      - name: Syntax check (PS + JSON)
+        shell: pwsh
+        run: ./tests/syntax-check.ps1
+      - name: DryRun (changes nothing)
+        shell: pwsh
+        run: ./installer/install.ps1 -DryRun
+      - name: E2E sandbox (mocks, no downloads)
+        shell: pwsh
+        run: ./tests/e2e-sandbox.ps1

@@ -59,6 +59,13 @@ The installer detects your machine (OS, CPU arch, RAM, GPU when visible,
 installed tools), proposes a profile, shows the full plan and asks for
 confirmation. No big download happens without your `yes`.
 
+Flags (exact):
+
+- Linux/macOS: `./install.sh --profile NAME --yes --no-models --check --repair --dry-run --help`
+- Windows: `.\installer\install.ps1 [-Profile NAME] [-Yes] [-NoModels] [-Check] [-Repair] [-DryRun] [-Help]`
+
+`-Yes`/`--yes` skips confirmation (plan still shown). `--no-models`/`-NoModels` skips Ollama pulls (CI friendly). `--check`/`-Check` and `--dry-run`/`-DryRun` change nothing. `--repair`/`-Repair` fixes only broken/missing, then retests.
+
 ### Supported systems
 
 | OS | Installer | Arch | Package managers |
@@ -69,12 +76,15 @@ confirmation. No big download happens without your `yes`.
 
 ### What is installed / configured
 
-- OpenCode (via npm, only if missing) + config `opencode.jsonc` (single source)
-- OpenViking memory server config (`~/.openviking/ov.conf`), server on `127.0.0.1:1933`
-- Ollama (official installer, only if missing) + embedding model + memory model for your tier
+- OpenCode (official `curl https://opencode.ai/v2/install`, fallback `brew anomalyco/tap/opencode-v2`, fallback `npm @opencode/cli`, only if missing) + config `opencode.jsonc` (single source)
+- Git, Python3, Node.js, uv, tsx (only if missing, via brew/apt/dnf/pacman on Unix, winget on Windows)
+- OpenViking memory server config (`~/.openviking/ov.conf`), server on `127.0.0.1:1933` (via `uv tool install openviking`, healthchecked)
+- Ollama (official `curl https://ollama.com/install.sh` on Linux, `brew install ollama` on macOS, winget `Ollama.Ollama` on Windows, only if missing) + embedding model + memory model for your tier
 - Plugins: DCP, Plannotator, Superpowers (+ OpenViking)
 - Commands `/discuss` `/plan` `/build` `/explore`, `project-thinking` skill (+ per profile)
 - Optional MCPs: Context7, Blender, Unity, Minecraft Paper/Fabric
+
+You do NOT need to manually install OpenCode, Ollama, uv, memory components, models or plugins. The installer detects missing components and installs them automatically, then verifies each with `*_--version`, service health and inference smoke test before continuing.
 
 ### If tools already exist
 
@@ -109,14 +119,17 @@ If the server is down, OpenCode still starts with a warning.
 
 ```powershell
 .\installer\install.ps1 -Check   # Windows (also: .\installer\doctor.ps1)
+.\installer\install.ps1 -DryRun  # Windows: show what would be done
 ```
 
 ```bash
-./install.sh --check             # Linux/macOS (also: --help, --dry-run)
+./install.sh --check             # Linux/macOS (also: --help, --dry-run, --repair, --yes, --no-models)
+./install.sh --dry-run --yes     # Linux/macOS: show what would be done
+./install.sh --repair            # Linux/macOS: fix only broken/missing, retest
 ```
 
-This verifies OS, architecture, dependencies, OpenCode, Ollama, config,
-memory server and models — and changes nothing.
+This verifies OS, architecture, Git, Python, Node, OpenCode, Ollama, uv, tsx, config,
+memory server and models — and changes nothing. Output is `PASS` / `MISSING` / `FAIL` per component.
 
 ### Troubleshooting
 
