@@ -1,6 +1,6 @@
 # Skills.psm1 — copy skill folders idempotently (project-thinking full, others as stubs).
+# NOTE: caller must have imported State (for Get-ForgeHome). No sibling imports here.
 function Install-ForgeSkills($SkillsSrc, $SkillNames) {
-  Import-Module "$PSScriptRoot/State.psm1" -Force
   $dest = Join-Path (Get-ForgeHome) '.config/opencode/skills'
   if (-not (Test-Path $dest)) { New-Item -ItemType Directory -Force -Path $dest | Out-Null }
   foreach ($s in $SkillNames) {

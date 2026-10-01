@@ -1,6 +1,6 @@
 # OpenCode.psm1 — config install, ONE source (opencode.jsonc), backup first, idempotent.
-Import-Module "$PSScriptRoot/State.psm1" -Force
-Import-Module "$PSScriptRoot/Backup.psm1" -Force
+# NOTE: never Import-Module sibling modules here (it would nest them and hide
+# their commands from the caller). Entry scripts import everything they need.
 function Get-ForgeOpenCodeConfigDir {
   return (Join-Path (Get-ForgeHome) '.config/opencode')
 }

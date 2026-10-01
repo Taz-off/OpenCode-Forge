@@ -1,5 +1,5 @@
 # Backup.psm1 — timestamped backups, excludes heavy dirs, never destructive.
-Import-Module "$PSScriptRoot/State.psm1" -Force
+# NOTE: never Import-Module siblings (nesting hides commands). Caller imports State first.
 function New-ForgeBackup($Path, $Label = 'pre-change') {
   if (-not (Test-Path $Path)) { return $null }
   $root = Join-Path (Get-ForgeHome) '.opencode-forge/backups'

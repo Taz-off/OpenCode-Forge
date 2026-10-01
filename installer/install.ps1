@@ -1,10 +1,11 @@
 # install.ps1 — interactive installer. Idempotent. No big download without confirmation.
-param([string]$Profile = '', [switch]$Yes)
+param([string]$Profile = '', [switch]$Yes, [switch]$NoModels)
 $Root = Split-Path $PSScriptRoot
 Import-Module "$Root/modules/Hardware.psm1" -Force
 Import-Module "$Root/modules/Software.psm1" -Force
 Import-Module "$Root/modules/Models.psm1" -Force
 Import-Module "$Root/modules/State.psm1" -Force
+Import-Module "$Root/modules/Backup.psm1" -Force
 Import-Module "$Root/modules/OpenCode.psm1" -Force
 Import-Module "$Root/modules/Skills.psm1" -Force
 Import-Module "$Root/modules/Ollama.psm1" -Force
@@ -62,6 +63,7 @@ $skills = @()
 foreach ($c in $components) { if ($skillMap.ContainsKey($c)) { $skills += $skillMap[$c] } }
 if ($skills.Count -gt 0) { Install-ForgeSkills (Join-Path $Root 'skills') $skills; Write-Host ("Skills: {0}" -f ($skills -join ', ')) }
 
+if (-not $NoModels) {
 if ($components -contains 'ollama' -or $components -contains 'embeddingModel' -or $components -contains 'memoryModel') {
   if (-not (Test-ForgeOllama)) { Write-Warning 'Ollama not found. Install it from https://ollama.com, then re-run.' }
   else {
@@ -75,6 +77,8 @@ if ($components -contains 'ollama' -or $components -contains 'embeddingModel' -o
     }
   }
 }
+}
+else { Write-Host 'Model downloads skipped (-NoModels). Run again without it to pull Ollama models.' }
 
 $state = Read-ForgeState
 $state.version = (Get-Content (Join-Path $Root 'manifest.json') -Raw | ConvertFrom-Json).version

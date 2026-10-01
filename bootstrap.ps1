@@ -18,6 +18,7 @@ New-Item -ItemType Directory -Force -Path $tmp | Out-Null
 $file = Join-Path $tmp 'forge.zip'
 Invoke-WebRequest -Uri $zip -OutFile $file -TimeoutSec 120
 Expand-Archive $file -DestinationPath (Join-Path $tmp 'src') -Force
+Get-ChildItem (Join-Path $tmp 'src') -Recurse -File -ErrorAction SilentlyContinue | Unblock-File -ErrorAction SilentlyContinue
 $installer = Get-ChildItem (Join-Path $tmp 'src') -Recurse -Filter 'install.ps1' -ErrorAction SilentlyContinue | Where-Object { $_.FullName -match 'installer' } | Select-Object -First 1
 if (-not $installer) { Write-Error 'installer/install.ps1 not found in archive.'; exit 1 }
 Write-Host ("Running: {0}" -f $installer.FullName)
